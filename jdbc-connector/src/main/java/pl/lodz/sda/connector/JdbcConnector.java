@@ -10,8 +10,8 @@ import java.util.List;
 public class JdbcConnector implements JdbcConnectorApi {
 
     @Override
-    public void batchInsert(List<Employee> employees) {
-        Connection connection = getDBConnection(DB.H2);
+    public void batchInsert(List<Employee> employees, DB db) {
+        Connection connection = getDBConnection(db);
         try {
             Statement statement = connection.createStatement();
             for (Employee emp : employees) {
@@ -44,8 +44,8 @@ public class JdbcConnector implements JdbcConnectorApi {
      * @return List<Employee>
      */
     @Override
-    public List<Employee> selectEmployees() {
-        Connection dbConnection = getDBConnection(DB.H2);
+    public List<Employee> selectEmployees(DB db) {
+        Connection dbConnection = getDBConnection(db);
         String sql = Employee.selectQuery();
         List<Employee> employees = new ArrayList<>();
         try {

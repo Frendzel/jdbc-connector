@@ -1,4 +1,4 @@
-package pl.lodz.sda;
+package pl.lodz.sda.io;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;

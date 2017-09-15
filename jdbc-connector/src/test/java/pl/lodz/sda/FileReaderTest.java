@@ -1,6 +1,7 @@
 package pl.lodz.sda;
 
 import org.junit.Test;
+import pl.lodz.sda.io.FileReader;
 
 public class FileReaderTest {
 

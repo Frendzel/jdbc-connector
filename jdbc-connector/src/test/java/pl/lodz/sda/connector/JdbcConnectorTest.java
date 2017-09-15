@@ -4,10 +4,12 @@ import org.apache.commons.csv.CSVRecord;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import pl.lodz.sda.FileReader;
-import pl.lodz.sda.mapper.EmployeeMapper;
+import pl.lodz.sda.dao.Employee;
+import pl.lodz.sda.io.FileReader;
+import pl.lodz.sda.io.FileWriter;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -24,6 +26,7 @@ public class JdbcConnectorTest {
 
     JdbcConnector jdbcConnector = new JdbcConnector();
     FileReader fileReader = new FileReader();
+    FileWriter fileWriter = new FileWriter();
 
     String createQuery = "CREATE TABLE EMPLOYEE" +
             "(id int primary key auto_increment, " +
@@ -44,11 +47,22 @@ public class JdbcConnectorTest {
         }
     }
 
+    @Test
+    public void testMySqlConnection(){
+        Connection dbConnection = JdbcConnector.getDBConnection(DB.MYSQL);
+        Assert.assertNotNull(dbConnection);
+        jdbcConnector.selectEmployees(DB.MYSQL);
+
+    }
+
 
     @Test
     public void batchInsert() throws Exception {
         List<CSVRecord> csvRecords = fileReader.readFile();
-        jdbcConnector.batchInsert(toEmployeeList(csvRecords));
+        List<Employee> employees = toEmployeeList(csvRecords);
+        jdbcConnector.batchInsert(employees,DB.H2);
+        fileWriter.saveData(employees);
+
     }
 
     @Test

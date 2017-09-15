@@ -6,9 +6,8 @@ import java.util.List;
 
 public interface JdbcConnectorApi {
 
-    public void batchInsert(
-            List<Employee> employees);
+    public void batchInsert(List<Employee> employees, DB db);
 
-    public List<Employee> selectEmployees();
+    public List<Employee> selectEmployees(DB db);
 
 }
