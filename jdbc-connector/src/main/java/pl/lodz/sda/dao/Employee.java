@@ -7,15 +7,10 @@ import java.util.Date;
 public class Employee {
 
     private int id;
-
     private Date birth_date;
-
     private String first_name;
-
     private String last_name;
-
     private char gender;
-
     private Date hire_date;
 
     public int getId() {
@@ -127,10 +122,14 @@ public class Employee {
         return "INSERT INTO " +
                 "EMPLOYEE (birth_date, first_name, last_name, " +
                 "gender, hire_date) VALUES (" +
-                "'"+df.format(getBirth_date()) + "', '" +
+                "'" + df.format(getBirth_date()) + "', '" +
                 getFirst_name() + "', '" +
                 getLast_name() + "', '" + getGender() + "', '"
                 + df.format(getHire_date()) + "')";
+    }
+
+    public static String selectQuery() {
+        return "SELECT * FROM EMPLOYEE";
     }
 
     // musi się przydać🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈

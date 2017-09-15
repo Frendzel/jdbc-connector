@@ -2,22 +2,16 @@ package pl.lodz.sda.connector;
 
 import pl.lodz.sda.dao.Employee;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class JdbcConnector implements JdbcConnectorApi {
 
-    private static final String DB_CONNECTION = "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1";
-    private static final String DB_USER = "sa";
-    private static final String DB_PASSWORD = "";
-
     @Override
     public void batchInsert(List<Employee> employees) {
-        Connection connection = getDBConnection();
+        Connection connection = getDBConnection(DB.H2);
         try {
             Statement statement = connection.createStatement();
             for (Employee emp : employees) {
@@ -39,9 +33,49 @@ public class JdbcConnector implements JdbcConnectorApi {
         }
     }
 
-    public static Connection getDBConnection() {
+    /**
+     * int id;
+     * Date birth_date;
+     * String first_name;
+     * String last_name;
+     * char gender;
+     * Date hire_date;
+     *
+     * @return List<Employee>
+     */
+    @Override
+    public List<Employee> selectEmployees() {
+        Connection dbConnection = getDBConnection(DB.H2);
+        String sql = Employee.selectQuery();
+        List<Employee> employees = new ArrayList<>();
         try {
-            return DriverManager.getConnection(DB_CONNECTION, DB_USER, DB_PASSWORD);
+            Statement statement = dbConnection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                int id = resultSet.getInt(1);
+                Date birth_date = resultSet.getDate(2);
+                String first_name = resultSet.getString(3);
+                String last_name = resultSet.getString(4);
+                String gender = resultSet.getString(5);
+                Date hire_date = resultSet.getDate(6);
+                employees.add(new Employee(id, birth_date,
+                        first_name, last_name,
+                        gender.charAt(0), hire_date));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return employees;
+    }
+
+    public static Connection getDBConnection(DB db) {
+        DBFactory dbFactory = new DBFactory();
+        ConnectionCredentials connectionCredentials = dbFactory.chooseDb(db);
+        try {
+            return DriverManager.getConnection(
+                    connectionCredentials.connection,
+                    connectionCredentials.user,
+                    connectionCredentials.password);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

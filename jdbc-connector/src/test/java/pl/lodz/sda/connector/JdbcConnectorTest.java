@@ -35,7 +35,7 @@ public class JdbcConnectorTest {
 
     @Before
     public void initDb(){
-        try (Connection dbConnection = JdbcConnector.getDBConnection()) {
+        try (Connection dbConnection = JdbcConnector.getDBConnection(DB.H2)) {
             Statement statement = dbConnection.createStatement();
             statement.execute(createQuery);
             statement.close();

@@ -9,4 +9,6 @@ public interface JdbcConnectorApi {
     public void batchInsert(
             List<Employee> employees);
 
+    public List<Employee> selectEmployees();
+
 }
