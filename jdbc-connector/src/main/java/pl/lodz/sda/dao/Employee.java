@@ -1,5 +1,7 @@
 package pl.lodz.sda.dao;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Employee {
@@ -97,8 +99,6 @@ public class Employee {
     }
 
 
-
-
     @Override
     public int hashCode() {
         int result = id;
@@ -120,5 +120,23 @@ public class Employee {
                 ", gender=" + gender +
                 ", hire_date=" + hire_date +
                 '}';
+    }
+
+    public String toStatementInsertQuery() {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        return "INSERT INTO " +
+                "EMPLOYEE (birth_date, first_name, last_name, " +
+                "gender, hire_date) VALUES (" +
+                "'"+df.format(getBirth_date()) + "', '" +
+                getFirst_name() + "', '" +
+                getLast_name() + "', '" + getGender() + "', '"
+                + df.format(getHire_date()) + "')";
+    }
+
+    // musi się przydać🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈
+    public String toPreparedStatementInsertQuery() {
+        return "INSERT INTO " +
+                "EMPLOYEE (birth_date, first_name, last_name, " +
+                "gender, hire_date) VALUES(?, ?, ?, ?, ?)";
     }
 }

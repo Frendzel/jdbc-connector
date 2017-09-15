@@ -30,29 +30,30 @@ public class H2MemoryDatabaseExample {
 
         String createQuery = "CREATE TABLE EMPLOYEE" +
                 "(id int primary key, " +
+                "birth_date date, " +
                 "first_name varchar(50), " +
                 "last_name varchar(50), " +
                 "gender char(1), " +
-                "age tinyint)";
-        String insertQuery = "INSERT INTO EMPLOYEE VALUES(" +
-                "1, 'Janusz', 'Kowalski', 'T', 27)";
-        String selectQuery = "select * from EMPLOYEE";
+                "hire_date date)";
+//        String insertQuery = "INSERT INTO EMPLOYEE VALUES(" +
+//                "1, 'Janusz', 'Kowalski', 'T', 27)";
+//        String selectQuery = "select * from EMPLOYEE";
         Statement statement;
         try {
             statement = connection.createStatement();
             System.out.println("createQuery: " +
                     statement.execute(createQuery));
-            System.out.println("insertQuery: " +
-                    statement.execute(insertQuery));
-            ResultSet resultSet = statement.executeQuery(selectQuery);
-            while (resultSet.next()) {
-                System.out.println("id " +
-                        resultSet.getInt(1) + " " +
-                        " imie: " + resultSet.getString(2) +
-                        " nazwisko: " + resultSet.getString(3) +
-                        " plec: " + resultSet.getString(4) +
-                        " wiek: " + resultSet.getInt(5));
-            }
+//            System.out.println("insertQuery: " +
+//                    statement.execute(insertQuery));
+//            ResultSet resultSet = statement.executeQuery(selectQuery);
+//            while (resultSet.next()) {
+//                System.out.println("id " +
+//                        resultSet.getInt(1) + " " +
+//                        " imie: " + resultSet.getString(2) +
+//                        " nazwisko: " + resultSet.getString(3) +
+//                        " plec: " + resultSet.getString(4) +
+//                        " wiek: " + resultSet.getInt(5));
+//            }
             statement.close();
         } catch (SQLException e) {
             e.printStackTrace();

@@ -9,7 +9,7 @@ import java.util.List;
 
 public class FileReader {
 
-    String FILE_NAME = "/Users/marcinerbel/Documents/jdbc-connector/jdbc-connector/src/main/resources/employee.csv"; //
+    String FILE_NAME = "src/main/resources/employee.csv"; //
     CSVFormat format = CSVFormat.DEFAULT.withDelimiter(',').withFirstRecordAsHeader();
 
     public List<CSVRecord> readFile() {
