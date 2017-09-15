@@ -4,17 +4,66 @@ import java.sql.*;
 
 public class H2MemoryDatabaseExample {
 
+    // DB_CLOSE_DELAY=-1 -> H2 będzie trzymać dane tak długo jak istnieje VM
+//    private static final String DB_CONNECTION = "jdbc:h2:tcp://localhost/~/test";
     private static final String DB_CONNECTION = "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1";
     private static final String DB_USER = "sa";
     private static final String DB_PASSWORD = "";
 
     public static void main(String[] args) throws Exception {
         try {
-            insertWithStatement();
-            insertWithPreparedStatement();
-        } catch (SQLException e) {
+//            Server server = Server.createTcpServer("-tcpPort", "9092", "-tcpAllowOthers").start();
+//            insertWithStatement();
+//            insertWithPreparedStatement();
+//            server.stop();
+            insertTestData();
+        } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private static void insertTestData() {
+        Connection connection = getDBConnection();
+        if (connection == null) {
+            throw new RuntimeException();
+        }
+
+        String createQuery = "CREATE TABLE EMPLOYEE" +
+                "(id int primary key, " +
+                "first_name varchar(50), " +
+                "last_name varchar(50), " +
+                "gender char(1), " +
+                "age tinyint)";
+        String insertQuery = "INSERT INTO EMPLOYEE VALUES(" +
+                "1, 'Janusz', 'Kowalski', 'T', 27)";
+        String selectQuery = "select * from EMPLOYEE";
+        Statement statement;
+        try {
+            statement = connection.createStatement();
+            System.out.println("createQuery: " +
+                    statement.execute(createQuery));
+            System.out.println("insertQuery: " +
+                    statement.execute(insertQuery));
+            ResultSet resultSet = statement.executeQuery(selectQuery);
+            while (resultSet.next()) {
+                System.out.println("id " +
+                        resultSet.getInt(1) + " " +
+                        " imie: " + resultSet.getString(2) +
+                        " nazwisko: " + resultSet.getString(3) +
+                        " plec: " + resultSet.getString(4) +
+                        " wiek: " + resultSet.getInt(5));
+            }
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
     private static void insertWithPreparedStatement() throws SQLException {
@@ -33,6 +82,8 @@ public class H2MemoryDatabaseExample {
             PreparedStatement insertPreparedStatement = connection.prepareStatement(InsertQuery);
             insertPreparedStatement.setInt(1, 1);
             insertPreparedStatement.setString(2, "Jose");
+
+
             insertPreparedStatement.executeUpdate();
             insertPreparedStatement.close();
 
@@ -70,7 +121,7 @@ public class H2MemoryDatabaseExample {
                 System.out.println("Id " + rs.getInt("id") + " Name " + rs.getString("name"));
             }
 
-            stmt.execute("DROP TABLE PERSON");
+            //stmt.execute("DROP TABLE PERSON");
             stmt.close();
             connection.commit();
         } catch (SQLException e) {
@@ -90,4 +141,16 @@ public class H2MemoryDatabaseExample {
         }
         return null;
     }
+    /**
+     *  SavePointy: https://www.tutorialspoint.com/jdbc/jdbc-transactions.htm
+     *  Batch: https://www.tutorialspoint.com/jdbc/jdbc-batch-processing.htm
+     *  PreparedStatement
+     *  Propertasy w mavenie
+     *  Logowanie
+     *  Podłączenie do mysqla
+     * https://dev.mysql.com/doc/connector-j/5.1/en/connector-j-usagenotes-connect-drivermanager.html
+     *
+     * Podsumowanie:
+     * https://www.tutorialspoint.com/jdbc/jdbc-quick-guide.htm
+     */
 }
