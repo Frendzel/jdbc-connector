@@ -2,10 +2,13 @@ package pl.lodz.sda;
 
 import java.sql.*;
 
+/**
+ * Przykładowa klasa zawierająca preparedStatementy i Statementy wraz z ich wykorzystaniem.
+ */
 public class H2MemoryDatabaseExample {
 
     // DB_CLOSE_DELAY=-1 -> H2 będzie trzymać dane tak długo jak istnieje VM
-//    private static final String DB_CONNECTION = "jdbc:h2:tcp://localhost/~/test";
+    // private static final String DB_CONNECTION = "jdbc:h2:tcp://localhost/~/test";
     private static final String DB_CONNECTION = "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1";
     private static final String DB_USER = "sa";
     private static final String DB_PASSWORD = "";
@@ -130,6 +133,9 @@ public class H2MemoryDatabaseExample {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
+            // kazde połączenia powinniśmy zamykać i powinniśmy to robić w bloku finally,
+            // aby mieć pewność, że zostanie zrealizowane nawet w przypadku "wysypania się "
+            // programu w trakcie.
             connection.close();
         }
     }
@@ -142,16 +148,4 @@ public class H2MemoryDatabaseExample {
         }
         return null;
     }
-    /**
-     *  SavePointy: https://www.tutorialspoint.com/jdbc/jdbc-transactions.htm
-     *  Batch: https://www.tutorialspoint.com/jdbc/jdbc-batch-processing.htm
-     *  PreparedStatement
-     *  Propertasy w mavenie
-     *  Logowanie
-     *  Podłączenie do mysqla
-     * https://dev.mysql.com/doc/connector-j/5.1/en/connector-j-usagenotes-connect-drivermanager.html
-     *
-     * Podsumowanie:
-     * https://www.tutorialspoint.com/jdbc/jdbc-quick-guide.htm
-     */
 }

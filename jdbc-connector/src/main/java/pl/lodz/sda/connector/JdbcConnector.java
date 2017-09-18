@@ -15,9 +15,12 @@ public class JdbcConnector implements JdbcConnectorApi {
         try {
             Statement statement = connection.createStatement();
             for (Employee emp : employees) {
+                // Tworzymy sql na podstawie pracownika
                 String sql = emp.toStatementInsertQuery();
+                // dodajemy sql'a do batcha
                 statement.addBatch(sql);
             }
+            // wykonujemy wszystkie zapytania sqlowe razem, tak, żeby zrobić to podczas jednej sesji.
             int[] insertedRows = statement.executeBatch();
             System.out.println("insertedRows: " +
                     Arrays.toString(insertedRows));

@@ -19,6 +19,7 @@ public class EmployeeMapper {
     }
 
     private static Employee toEmployee(CSVRecord record) {
+        // DateFormatter, w którym ustalimy żądany format daty
         DateTimeFormatter dateTimeFormatter =
                 DateTimeFormat.forPattern("yyyy-MM-dd");
         return new Employee(Integer.parseInt(record.get(0)),

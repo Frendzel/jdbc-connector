@@ -132,7 +132,6 @@ public class Employee {
         return "SELECT * FROM EMPLOYEE";
     }
 
-    // musi się przydać🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈
     public String toPreparedStatementInsertQuery() {
         return "INSERT INTO " +
                 "EMPLOYEE (birth_date, first_name, last_name, " +
